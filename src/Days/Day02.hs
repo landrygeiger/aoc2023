@@ -73,7 +73,7 @@ type Input = [Game]
 
 type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
 roundPossible :: Round -> Bool
@@ -83,8 +83,17 @@ gamePossible :: Game -> Bool
 gamePossible g = all roundPossible $ gameRounds g
 
 partA :: Input -> OutputA
-partA = sum . map gameId . filter gamePossible 
+partA = sum . map gameId . filter gamePossible
 
 ------------ PART B ------------
+minCubes :: [Round] -> Round
+minCubes =
+  let
+    fold curr acc = Round { red = max (red curr) (red acc), green = max (green curr) (green acc), blue = max (blue curr) (blue acc)}
+  in foldr fold Round { red = 0, green = 0, blue = 0 }
+
+cubesPower :: Round -> Int
+cubesPower r = red r * green r * blue r
+
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB = sum . map (cubesPower . minCubes . gameRounds)
