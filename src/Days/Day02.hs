@@ -14,13 +14,23 @@ import qualified Util.Util as U
 import qualified Program.RunDay as R (runDay, Day)
 import Data.Attoparsec.Text
 import Data.Void
+import Data.Text (Text, pack)
+import Control.Applicative
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
 runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
+parseColor :: Parser Text
+parseColor = string (pack "red") <|> string (pack "green") <|> string (pack "blue")
 
+parseCubeCount :: Parser String
+parseCubeCount = do
+  thiscolor <- parseColor
+  _ <- string " "
+  count <- decimal
+  return thiscolor
 
 inputParser :: Parser Input
 inputParser = error "Not implemented yet!"
